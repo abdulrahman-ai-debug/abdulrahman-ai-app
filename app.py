@@ -1,106 +1,117 @@
 import streamlit as st
-
-# Set page config
-st.set_page_config(page_title="Abdulrahman.ai", layout="centered")
-
-# Define your password
-correct_password = "Okara"
-
-# Session state to track login
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-
-# Password gate
-if not st.session_state.authenticated:
-    st.title("🔐 Abdulrahman.ai Access")
-    password_input = st.text_input("Please enter password here:", type="password")
-    if st.button("Enter"):
-        if password_input == correct_password:
-            st.session_state.authenticated = True
-            st.success("Welcome! 🎬")
-        else:
-            st.error("Incorrect password. Access denied.")
-else:
-    # Main App Interface
-    st.title("🎬 Welcome to Abdulrahman.ai")
-    st.subheader("Choose your cinematic tool:")
-# 🎬 Hafiz Hammad Hussain — Cinematic Header
 from PIL import Image
 import requests
 from io import BytesIO
 
-corner_image_url = "https://your-uploaded-url.com/hammad-corner.jpg"  # ← Replace with actual corner image URL
-response = requests.get(corner_image_url)
-corner_img = Image.open(BytesIO(response.content))
-st.image(corner_img, caption="Hafiz Hammad Hussain", width=250)
+# 🎬 Logo + Corner Image
+logo_url = "https://your-uploaded-url.com/logo.png"  # ← Replace with your logo URL
+corner_url = "https://your-uploaded-url.com/corner.jpg"  # ← Replace with your corner image URL
+
+st.image(logo_url, width=100)
+st.image(corner_url, caption="Hafiz Hammad Hussain", width=250)
 
 st.title("🎬 Abdulrahman.ai — Cinematic AI Studio")
 st.markdown("---")
 
 # 🔐 Password Gate
-password = st.text_input("🔐 Please enter password here", type="password")
+password = st.text_input("🔐 Please enter password", type="password")
 if password != "Okara":
     st.warning("🔒 Access Denied. Please enter correct password.")
     st.stop()
 
-# 🎬 Cinematic Feature Boxes
-st.markdown("## 🎥 Choose Your Cinematic Tool")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.image("https://your-uploaded-url.com/text-to-image.jpg", width=150)  # ← Text to Image
-    if st.button("🖼️ Text to Image"):
-        st.session_state.tool = "image"
-
-with col2:
-    st.image("https://your-uploaded-url.com/text-to-video.jpg", width=150)  # ← Text to Video
-    if st.button("📹 Text to Video"):
-        st.session_state.tool = "video"
-
-with col3:
-    st.image("https://your-uploaded-url.com/text-to-voice.jpg", width=150)  # ← Text to Voice
-    if st.button("🎤 Text to Voice"):
-        st.session_state.tool = "voice"
-
-col4, col5, col6 = st.columns(3)
-
-with col4:
-    st.image("https://your-uploaded-url.com/text-to-song.jpg", width=150)  # ← Text to Song
-    if st.button("🎶 Text to Song"):
-        st.session_state.tool = "song"
-
-with col5:
-    st.image("https://your-uploaded-url.com/lip-sync.jpg", width=150)  # ← Lip Sync
-    if st.button("👄 Lip Sync"):
-        st.session_state.tool = "lipsync"
-
-with col6:
-    st.image("https://your-uploaded-url.com/animate-photo.jpg", width=150)  # ← Animate Photo
-    if st.button("🧑‍🎤 Animate Photo"):
-        st.session_state.tool = "animate"
+# 🎥 Feature Selection
+st.subheader("🎯 Choose Your Cinematic Tool")
+tool = st.selectbox("Select a feature", [
+    "🖼️ Text to Image",
+    "📹 Text to Video",
+    "🎤 Text to Voice",
+    "🎶 Text to Song",
+    "👄 Lip Sync",
+    "🧑‍🎤 Animate Photo"
+])
 
 st.markdown("---")
 
-# 📥 Saved Projects Section
+# 🖼️ Text to Image
+if tool == "🖼️ Text to Image":
+    st.subheader("🖼️ Text to Image Generator")
+    style = st.selectbox("Choose style", ["Cartoon", "Realistic", "3D", "Steampunk", "Oil Painting", "Vintage", "Viral Kids"])
+    ratio = st.selectbox("Choose ratio", ["1:1", "16:9", "9:16"])
+    prompt = st.text_area("Enter your image prompt")
+    if st.button("🚀 Generate Image"):
+        st.success(f"Generated {style} image with {ratio} ratio.")
+        st.image("https://via.placeholder.com/512x512.png", caption="Preview")
+        st.download_button("📥 Download", "Image content", file_name="image.png")
+        st.button("🔗 Share")
+
+# 📹 Text to Video
+elif tool == "📹 Text to Video":
+    st.subheader("📹 Text to Video Generator")
+    style = st.selectbox("Choose video style", ["Realistic", "Anime", "Cinematic", "Cartoon"])
+    duration = st.slider("Select duration (minutes)", 1, 30, 5)
+    frames = st.slider("Select frame count", 10, 1000, 100)
+    prompt = st.text_area("Enter your video prompt")
+    if st.button("🎬 Generate Video"):
+        st.success(f"{duration}-minute {style} video with {frames} frames generated.")
+        st.video("https://sample-videos.com/video123.mp4")
+        st.download_button("📥 Download", "Video content", file_name="video.mp4")
+        st.button("🔗 Share")
+
+# 🎤 Text to Voice
+elif tool == "🎤 Text to Voice":
+    st.subheader("🎤 Text to Voice Generator")
+    voice_type = st.selectbox("Choose voice type", ["Child", "Adult", "Cartoon", "Old"])
+    accent = st.selectbox("Choose accent", ["US English", "UK English", "Urdu"])
+    emotion = st.selectbox("Choose emotion", ["Happy", "Sad", "Angry", "Neutral"])
+    text = st.text_area("Enter text to convert to voice")
+    if st.button("🔊 Generate Voice"):
+        st.success(f"{voice_type} voice with {accent} accent and {emotion} emotion generated.")
+        st.audio("https://sample-videos.com/audio123.mp3")
+        st.download_button("📥 Download", "Voice content", file_name="voice.mp3")
+        st.button("🔗 Share")
+
+# 🎶 Text to Song
+elif tool == "🎶 Text to Song":
+    st.subheader("🎶 Text to Song Generator")
+    genre = st.selectbox("Choose genre", ["Rap", "Sad", "Happy", "Classical", "Pop"])
+    language = st.selectbox("Choose language", ["English", "Urdu"])
+    style = st.selectbox("Choose style", ["Suno Style", "Udio Style", "Custom"])
+    lyrics = st.text_area("Enter your lyrics")
+    if st.button("🎵 Generate Song"):
+        st.success(f"{genre} song in {language} using {style} style generated.")
+        st.audio("https://sample-videos.com/audio123.mp3")
+        st.download_button("📥 Download", "Song content", file_name="song.mp3")
+        st.button("🔗 Share")
+
+# 👄 Lip Sync
+elif tool == "👄 Lip Sync":
+    st.subheader("👄 Lip Sync Generator")
+    uploaded_photo = st.file_uploader("Upload photo")
+    uploaded_voice = st.file_uploader("Upload voice")
+    speed = st.slider("Lip sync speed", 0.5, 2.0, 1.0)
+    if st.button("🎭 Generate Lip Sync"):
+        st.success("Lip sync video generated.")
+        st.video("https://sample-videos.com/video123.mp4")
+        st.download_button("📥 Download", "LipSync content", file_name="lipsync.mp4")
+        st.button("🔗 Share")
+
+# 🧑‍🎤 Animate Photo
+elif tool == "🧑‍🎤 Animate Photo":
+    st.subheader("🧑‍🎤 Animate Photo")
+    animation_type = st.selectbox("Choose animation", ["Ripple", "3D Zoom", "Cinemagraph", "Sparkle"])
+    overlay = st.selectbox("Choose overlay", ["Rain", "Fire", "Glow", "None"])
+    uploaded_image = st.file_uploader("Upload photo to animate")
+    if st.button("✨ Animate"):
+        st.success(f"{animation_type} animation with {overlay} overlay applied.")
+        st.image("https://via.placeholder.com/512x512.png", caption="Animated Preview")
+        st.download_button("📥 Download", "Animation content", file_name="animated.gif")
+        st.button("🔗 Share")
+
+# 📁 Saved Projects
+st.markdown("---")
 st.subheader("📁 Saved Projects")
 st.info("🧠 The projects you have worked on are saved here for future access.")
 
-# 🧠 Branded Footer
+# 🧾 Footer Branding
 st.markdown("---")
 st.markdown("**Created by Hafiz Hammad Hussain — Founder of Abdulrahman.ai**")
-
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.button("Text to Image")
-        st.button("Text to Video")
-    with col2:
-        st.button("Text to Voice")
-        st.button("Photo Lip Sync")
-    with col3:
-        st.button("Text to Song")
-        st.button("Animate Photo to Video")
-
-    st.markdown("---")
-    st.info("📁 The projects you have worked on are saved here.")
-    st.caption("This cutting-edge AI tool, created by Hafiz Hammad Hussain, fulfills your needs with ease, speed, and accuracy.")
