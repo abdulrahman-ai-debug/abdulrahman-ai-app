@@ -1,5 +1,5 @@
-streamlit
-openai
-python-dotenv
-Pillow
+fastapi
+uvicorn
+pydantic
+python-multipart
 requests
